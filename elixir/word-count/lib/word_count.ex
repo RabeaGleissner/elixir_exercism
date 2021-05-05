@@ -9,18 +9,16 @@ defmodule WordCount do
 
   def count(sentence) do
     sentence
-    |> String.split(" ")
-    |> Enum.map(fn word -> String.replace(word, ~r/([^\w\-])+/u, "") end)
-    |> Enum.reject(fn word -> word == "" end)
+    |> String.downcase
+    |> String.replace(~r/,|!|&|@|\$|%|\^|:/i, "")
+    |> String.split(" ", trim: true)
     |> Enum.flat_map(fn word -> String.split(word, "_") end)
-    |> Enum.map(&String.downcase/1)
-    |> update_tracker(%{})
+    |> update_tracker
   end
 
+  defp update_tracker(sentence, tracker \\ %{})
   defp update_tracker([], tracker), do: tracker
   defp update_tracker([word | rest], tracker) do
-    current_count = Map.get(tracker, word)
-    new_count = if current_count, do: current_count + 1, else: 1
-    update_tracker(rest, Map.put(tracker, word, new_count))
+    update_tracker(rest, Map.update(tracker, word, 1, &(&1 + 1)))
   end
 end
