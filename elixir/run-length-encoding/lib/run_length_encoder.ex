@@ -10,7 +10,7 @@ defmodule RunLengthEncoder do
   def encode(string) do
     string
     |> String.split("", trim: true)
-    |> add_to_map
+    |> track_occurences
     |> encode_string
   end
 
@@ -20,10 +20,20 @@ defmodule RunLengthEncoder do
     end)
   end
 
-  defp add_to_map(split_string, map \\ %{})
-  defp add_to_map([], map), do: map
-  defp add_to_map([letter | rest], map) do
-    add_to_map(rest, Map.update(map, letter, 1, &(&1 + 1)))
+  # Maybe use list of tuples instead of map??
+  #tracker = [
+    #{"W", 12},
+    #{"B", 1},
+    #{"W", 15},
+    #{"X", 3},
+  #]
+
+  defp track_occurences(split_string, tracker \\ [])
+  defp track_occurences([], tracker), do: tracker
+  defp track_occurences([letter | [second_letter | rest]], tracker) do
+    if letter == second_letter do
+    end
+    track_occurences(rest, Map.update(map, letter, 1, &(&1 + 1)))
   end
 
   @spec decode(String.t()) :: String.t()
