@@ -18,5 +18,5 @@ defmodule Bob do
   end
   defp exclamation?(input), do: String.ends_with?(input, "!")
   defp question?(input), do: String.ends_with?(input, "?")
-  defp no_letters?(input), do: !String.match?(input, ~r/^[a-zA-Z]+$/)
+  defp no_letters?(input), do: String.upcase(input) == String.downcase(input)
 end
